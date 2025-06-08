@@ -20,3 +20,14 @@ opt.cursorline = true
 opt.termguicolors = true
 opt.background = "dark"
 opt.signcolumn = "yes"
+
+-- backspace
+opt.backspace = "indent,eol,start"
+
+-- clipboard
+opt.clipboard:append("unnamedplus") -- enable system clipboard
+
+-- windows
+opt.splitright = true
+opt.splitbelow = true
+
