@@ -22,7 +22,7 @@ return {
         no_bold = false,
         no_underline = false,
       })
-      vim.cmd([[colorscheme catppuccin]])
+      vim.cmd.colorscheme "catppuccin"
     end,
   },
 }
