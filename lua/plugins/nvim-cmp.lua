@@ -6,7 +6,7 @@ return {
     "hrsh7th/cmp-path", -- source for file system paths
     {
       "L3MON4D3/LuaSnip",
-      version = "v2.*", 
+      version = "v2.*",
       build = "make install_jsregexp",
     },
     "saadparwaiz1/cmp_luasnip", -- for autocompletion
@@ -26,7 +26,7 @@ return {
       completion = {
         completeopt = "menu,menuone,preview,noselect",
       },
-      snippet = { 
+      snippet = {
         expand = function(args)
           luasnip.lsp_expand(args.body)
         end,
@@ -42,6 +42,7 @@ return {
       }),
       -- sources for autocompletion
       sources = cmp.config.sources({
+        {name = "nvim_lsp"},
         { name = "luasnip" }, -- snippets
         { name = "buffer" }, -- text within current buffer
         { name = "path" }, -- file system paths
