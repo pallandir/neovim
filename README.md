@@ -42,3 +42,34 @@
 </div>
 
 ---
+
+<div style="display: flex; gap: 20px;">
+
+<div style="flex: 1;">
+
+### File explorer
+| Command      | Description                          |
+| ------------ | ------------------------------------ |
+| `<leader>nn` | Toggle file explorer                 |
+| `<leader>nf` | Toggle file explorer on current file |
+| `<leader>nc` | Collapse file explorer               |
+| `<leader>nr` | Refresh file explorer                |
+
+</div>
+
+<div style="flex: 1;">
+
+### Find files and grep (telescope)
+| Command      | Description                                           |
+| ------------ | ----------------------------------------------------- |
+| `<leader>ff` | Fuzzy find files in current working directory         |
+| `<leader>fr` | Fuzzy find recent files                               |
+| `<leader>fs` | Find string in current working directory              |
+| `<leader>fc` | Find string under cursor in current working directory |
+| `<leader>ft` | Find todos comments                                   |
+
+</div>
+
+</div>
+
+---
