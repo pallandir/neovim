@@ -73,3 +73,22 @@
 </div>
 
 ---
+
+
+<div style="display: flex; gap: 20px;">
+
+<div style="flex: 1;">
+
+### Visual Mode
+| Command      | Description                        |
+| ------------ | ---------------------------------- |
+| `<leader>xw` | Open trouble workspace diagnostics |
+| `<leader>xd` | Open trouble document diagnostics  |
+| `<leader>xq` | Open trouble quickfix list         |
+| `<leader>xl` | Open trouble location list         |
+| `<leader>xt` | Open todos in trouble              |
+
+</div>
+
+
+</div>
