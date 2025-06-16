@@ -90,5 +90,17 @@
 
 </div>
 
+<div style="flex: 1;">
+
+### Buffers & Windows
+| Command          | Description               |
+| ---------------- | ------------------------- |
+| `:ls`            | List buffers              |
+| `:b#`            | Switch to previous buffer |
+| `:bn`            | Next buffer               |
+| `:bp`            | Previous buffer           |
+| `Ctrl+w h/j/k/l` | Navigate windows          |
+
+</div>
 
 </div>
