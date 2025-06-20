@@ -127,6 +127,20 @@ rm -rf ~/.config/nvim/.git
 | `<leader>mp` | Manual file formatting            |
 | `<leader>l`  | Manual file linting               |
 
+### Autocomplete ([nvim-cmp](https://github.com/hrsh7th/nvim-cmp))
+
+>Auto complete is configured to directly integrates wiht buffer context, file system, code snippets and cutom lsp config. As long as you defined a snippet tool for your custom lsp it will automatically be taken into account.
+
+| Command        | Description                         |
+| -------------- | ----------------------------------- |
+| `<C-k>`        | Select previous  item in suggestion |
+| `<C-j>`        | Select next  item in suggestion     |
+| `<C-b>`        | Scroll docs (up)                    |
+| `<C-f>`        | Scroll docs (down)                  |
+| `<C-Space>`    | Enable suggestions                  |
+| `<C-e>`        | Abort sugestions                    |
+| `<CR>` (enter) | Confirm selection                   |
+
 
 ## License
 
