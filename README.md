@@ -129,7 +129,7 @@ rm -rf ~/.config/nvim/.git
 
 ### Autocomplete ([nvim-cmp](https://github.com/hrsh7th/nvim-cmp))
 
->Auto complete is configured to directly integrates wiht buffer context, file system, code snippets and cutom lsp config. As long as you defined a snippet tool for your custom lsp it will automatically be taken into account.
+>Auto complete is configured to directly integrates with buffer context, file system, code snippets and custom lsp config. As long as you defined a snippet tool (i.e rust-analyser for Rust) for your custom lsp it will automatically be taken into account.
 
 | Command        | Description                         |
 | -------------- | ----------------------------------- |
