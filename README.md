@@ -21,6 +21,17 @@
 <img align="center" src="./public_assets/preview.png" alt="preview">
 
 
+## About this project
+
+After six years of using `VSCode`, I decided to switch to `Neovim`. I found traditional IDEs to be overly bloated, packed with every possible tool, often sluggish, and with a minimal learning curve that didn’t challenge or engage me.
+
+In contrast, learning and configuring Vim felt rewarding. It offers a streamlined and efficient development experience that’s both powerful and enjoyable. I initially experimented with `NVChad`, but eventually moved away from it to build my own setup from scratch. This hands-on approach helped me deeply understand how `Neovim` works under the hood.
+
+This project is the result: a fully customized, lightweight IDE tailored to my workflow, with only the essential plugins. It supports Vue.js, Python, Go, Rust, and OpenTofu for a fast and focused development environment.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
 ## My neovim keymaps
 
 > [!important] 
