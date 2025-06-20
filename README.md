@@ -1,3 +1,26 @@
+<a name="readme-top"></a>
+
+<br />
+<div align="center">
+  <a href="#">
+    <img src="./public_assets/neovim.svg" alt="Logo" width="80" height="80">
+  </a>
+  <h3 align="center">Neovim IDE setup</h3>
+
+  <p align="center">
+    Custom setup of Neovim IDE from scratch.
+    <br />
+    <br />
+    <a href="https://github.com/pallandir/neovim/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/pallandir/neovim/issues">Request Feature</a>
+  </p>
+</div>
+<br>
+<br>
+<img align="center" src="./public_assets/preview.png" alt="preview">
+
+
 ## My neovim keymaps
 
 > [!important] 
