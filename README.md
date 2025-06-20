@@ -120,14 +120,12 @@ rm -rf ~/.config/nvim/.git
 | `<leader>xt` | Open todos in trouble              |
 
 
-### Buffers & Windows
-| Command          | Description               |
-| ---------------- | ------------------------- |
-| `:ls`            | List buffers              |
-| `:b#`            | Switch to previous buffer |
-| `:bn`            | Next buffer               |
-| `:bp`            | Previous buffer           |
-| `Ctrl+w h/j/k/l` | Navigate windows          |
+### Formatting and linting ([conform.nvim](https://github.com/stevearc/conform.nvim) | [nvim-lint](https://github.com/mfussenegger/nvim-lint))
+| Command      | Description                       |
+| ------------ | --------------------------------- |
+| `:w`         | Automatic format and lint on save |
+| `<leader>mp` | Manual file formatting            |
+| `<leader>l`  | Manual file linting               |
 
 
 ## License
