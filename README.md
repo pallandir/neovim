@@ -32,6 +32,36 @@ This project is the result: a fully customized, lightweight IDE tailored to my w
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
+## Getting Started
+
+Getting up and running with this custom Neovim setup is simple. Just clone the repository into your Neovim config directory:
+
+```sh
+git clone git@github.com:pallandir/neovim.git ~/.config/nvim
+```
+
+If you plan to make changes and use your own version, you can either update the remote to point to your repository or remove the .git directory entirely to start fresh:
+
+```sh
+git remote set-url origin <your-remote-url>
+# or
+rm -rf ~/.config/nvim/.git
+```
+
+> [!tip]
+>Package manager: `Lazy.nvim`
+>    - `:Lazy` (to open the Lazy interface)
+>
+>LSP manager: `Mason.nvim`
+>    - `:Mason` (to open Mason imterface)
+>    - `:MasonInstall` \<lsp> to install a specific lsp
+
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+---
+
+
 ## My neovim keymaps
 
 > [!important] 
