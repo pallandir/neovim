@@ -60,16 +60,16 @@ rm -rf ~/.config/nvim/.git
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-## custom keymap
+## Custom keymap
 
 > [!important] 
 > In this config `<leader> = space`
 
-### General
+### General keys
 
 | Command      | Description                                        |
 | ------------ | -------------------------------------------------- |
-| `jk`         | Exit insert mode by pressing jk                    |
+| `jk`         | Exit insert mode                                   |
 | `<leader>nh` | Clear search highligh (:nohl)                      |
 | `<leader>+`  | Increment selected number                          |
 | `<leader>-`  | Decrement selected number                          |
@@ -84,14 +84,7 @@ rm -rf ~/.config/nvim/.git
 | `<leader>tf` | Open current buffer in a new tab                   |
 
 
-### Working session
-| Command      | Description                            |
-| ------------ | -------------------------------------- |
-| `<leader>ws` | Save session for auto session root dir |
-| `<leader>wr` | Restore session for cwd                |
-
-
-### File explorer
+### File explorer ([nvim-tree](https://github.com/nvim-tree/nvim-tree.lua))
 | Command      | Description                          |
 | ------------ | ------------------------------------ |
 | `<leader>nn` | Toggle file explorer                 |
@@ -100,7 +93,14 @@ rm -rf ~/.config/nvim/.git
 | `<leader>nr` | Refresh file explorer                |
 
 
-### Find files and grep (telescope)
+### Session management ([auto-session.nvim](https://github.com/rmagatti/auto-session))
+| Command      | Description                            |
+| ------------ | -------------------------------------- |
+| `<leader>ws` | Save session for auto session root dir |
+| `<leader>wr` | Restore session for cwd                |
+
+
+### Find files and grep ([telescope.nvim](https://github.com/nvim-telescope/telescope.nvim))
 | Command      | Description                                           |
 | ------------ | ----------------------------------------------------- |
 | `<leader>ff` | Fuzzy find files in current working directory         |
@@ -110,7 +110,7 @@ rm -rf ~/.config/nvim/.git
 | `<leader>ft` | Find todos comments                                   |
 
 
-### Visual Mode
+### Errors management ([trouble.nvim](https://github.com/folke/trouble.nvim))
 | Command      | Description                        |
 | ------------ | ---------------------------------- |
 | `<leader>xw` | Open trouble workspace diagnostics |
