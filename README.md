@@ -59,18 +59,11 @@ rm -rf ~/.config/nvim/.git
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
----
 
-
-## My neovim keymaps
+## custom keymap
 
 > [!important] 
-> In my config `<leader> = space`
-
-
-<div style="display: flex; gap: 20px;">
-
-<div style="flex: 1;">
+> In this config `<leader> = space`
 
 ### General
 
@@ -91,25 +84,12 @@ rm -rf ~/.config/nvim/.git
 | `<leader>tf` | Open current buffer in a new tab                   |
 
 
-</div>
-
-<div style="flex: 1;">
-
 ### Working session
 | Command      | Description                            |
 | ------------ | -------------------------------------- |
 | `<leader>ws` | Save session for auto session root dir |
 | `<leader>wr` | Restore session for cwd                |
 
-</div>
-
-</div>
-
----
-
-<div style="display: flex; gap: 20px;">
-
-<div style="flex: 1;">
 
 ### File explorer
 | Command      | Description                          |
@@ -119,9 +99,6 @@ rm -rf ~/.config/nvim/.git
 | `<leader>nc` | Collapse file explorer               |
 | `<leader>nr` | Refresh file explorer                |
 
-</div>
-
-<div style="flex: 1;">
 
 ### Find files and grep (telescope)
 | Command      | Description                                           |
@@ -132,16 +109,6 @@ rm -rf ~/.config/nvim/.git
 | `<leader>fc` | Find string under cursor in current working directory |
 | `<leader>ft` | Find todos comments                                   |
 
-</div>
-
-</div>
-
----
-
-
-<div style="display: flex; gap: 20px;">
-
-<div style="flex: 1;">
 
 ### Visual Mode
 | Command      | Description                        |
@@ -152,9 +119,6 @@ rm -rf ~/.config/nvim/.git
 | `<leader>xl` | Open trouble location list         |
 | `<leader>xt` | Open todos in trouble              |
 
-</div>
-
-<div style="flex: 1;">
 
 ### Buffers & Windows
 | Command          | Description               |
@@ -165,6 +129,9 @@ rm -rf ~/.config/nvim/.git
 | `:bp`            | Previous buffer           |
 | `Ctrl+w h/j/k/l` | Navigate windows          |
 
-</div>
 
-</div>
+## License
+
+This repository and all its content is under `GNU General Public License v3.0`.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
