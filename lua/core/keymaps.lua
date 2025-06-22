@@ -6,6 +6,10 @@ local term_win = nil
 
 keymap.set("i", "jk", "<ESC>", { desc = "Exit insert mode by pressing jk" })
 keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highligh" })
+keymap.set("i", "<C-h>", "<Left>", { desc = "Move cursor to the left when in insert mode", noremap = true })
+keymap.set("i", "<C-j>", "<Down>", { desc = "Move cursor down when in insert mode", noremap = true })
+keymap.set("i", "<C-k>", "<Up>", { desc = "Move cursor up when in insert mode", noremap = true })
+keymap.set("i", "<C-l>", "<Right>", { desc = "Move cursor to the right when in insert mode", noremap = true })
 
 -- inc / dec numbers
 keymap.set("n", "<leader>+", "<C-a>", { desc = "Increment selected number" })
