@@ -4,7 +4,7 @@ local keymap = vim.keymap
 local term_buf = nil
 local term_win = nil
 
-keymap.set("i", "jk", "<ESC>", { desc = "Exit insert mode by pressing jk" })
+keymap.set("i", "jk", "<ESC>:w<CR>", { desc = "Exit insert mode by pressing jk" })
 keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highligh" })
 keymap.set("i", "<C-h>", "<Left>", { desc = "Move cursor to the left when in insert mode", noremap = true })
 keymap.set("i", "<C-j>", "<Down>", { desc = "Move cursor down when in insert mode", noremap = true })
