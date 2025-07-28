@@ -23,7 +23,7 @@ opt.signcolumn = "yes"
 
 -- backspace
 opt.backspace = "indent,eol,start"
-opt.wrap = false
+opt.wrap = true
 
 -- clipboard
 opt.clipboard:append("unnamedplus") -- enable system clipboard
