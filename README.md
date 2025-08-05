@@ -20,7 +20,6 @@
 <br>
 <img align="center" src="./public_assets/preview.png" alt="preview">
 
-
 ## About this project
 
 After six years of using `VSCode`, I decided to switch to `Neovim`. I found traditional IDEs to be overly bloated, packed with every possible tool, often sluggish, and with a minimal learning curve that didn’t challenge or engage me.
@@ -30,7 +29,6 @@ In contrast, learning and configuring Vim felt rewarding. It offers a streamline
 This project is the result: a fully customized, lightweight IDE tailored to my workflow, with only the essential plugins. It supports Vue.js, Python, Go, Rust, and OpenTofu for a fast and focused development environment.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 ## Getting Started
 
@@ -49,20 +47,20 @@ rm -rf ~/.config/nvim/.git
 ```
 
 > [!tip]
->Package manager: `Lazy.nvim`
->    - `:Lazy` (to open the Lazy interface)
+> Package manager: `Lazy.nvim`
 >
->LSP manager: `Mason.nvim`
->    - `:Mason` (to open Mason imterface)
->    - `:MasonInstall` \<lsp> to install a specific lsp
-
+> - `:Lazy` (to open the Lazy interface)
+>
+> LSP manager: `Mason.nvim`
+>
+> - `:Mason` (to open Mason imterface)
+> - `:MasonInstall` \<lsp> to install a specific lsp
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
 ## Custom keymap
 
-> [!important] 
+> [!important]
 > In this config `<leader> = space`
 
 ### General keys
@@ -83,8 +81,8 @@ rm -rf ~/.config/nvim/.git
 | `<leader>tp` | Go to previous tab                                 |
 | `<leader>tf` | Open current buffer in a new tab                   |
 
-
 ### File explorer ([nvim-tree](https://github.com/nvim-tree/nvim-tree.lua))
+
 | Command      | Description                          |
 | ------------ | ------------------------------------ |
 | `<leader>nn` | Toggle file explorer                 |
@@ -92,15 +90,15 @@ rm -rf ~/.config/nvim/.git
 | `<leader>nc` | Collapse file explorer               |
 | `<leader>nr` | Refresh file explorer                |
 
-
 ### Session management ([auto-session.nvim](https://github.com/rmagatti/auto-session))
+
 | Command      | Description                            |
 | ------------ | -------------------------------------- |
 | `<leader>ws` | Save session for auto session root dir |
 | `<leader>wr` | Restore session for cwd                |
 
-
 ### Find files and grep ([telescope.nvim](https://github.com/nvim-telescope/telescope.nvim))
+
 | Command      | Description                                           |
 | ------------ | ----------------------------------------------------- |
 | `<leader>ff` | Fuzzy find files in current working directory         |
@@ -109,8 +107,8 @@ rm -rf ~/.config/nvim/.git
 | `<leader>fc` | Find string under cursor in current working directory |
 | `<leader>ft` | Find todos comments                                   |
 
-
 ### Errors management ([trouble.nvim](https://github.com/folke/trouble.nvim))
+
 | Command      | Description                        |
 | ------------ | ---------------------------------- |
 | `<leader>xw` | Open trouble workspace diagnostics |
@@ -119,8 +117,8 @@ rm -rf ~/.config/nvim/.git
 | `<leader>xl` | Open trouble location list         |
 | `<leader>xt` | Open todos in trouble              |
 
-
 ### Formatting and linting ([conform.nvim](https://github.com/stevearc/conform.nvim) | [nvim-lint](https://github.com/mfussenegger/nvim-lint))
+
 | Command      | Description                       |
 | ------------ | --------------------------------- |
 | `:w`         | Automatic format and lint on save |
@@ -129,18 +127,29 @@ rm -rf ~/.config/nvim/.git
 
 ### Autocomplete ([nvim-cmp](https://github.com/hrsh7th/nvim-cmp))
 
->Auto complete is configured to directly integrates with buffer context, file system, code snippets and custom lsp config. As long as you defined a snippet tool (i.e rust-analyser for Rust) for your custom lsp it will automatically be taken into account.
+> Auto complete is configured to directly integrates with buffer context, file system, code snippets and custom lsp config. As long as you defined a snippet tool (i.e rust-analyser for Rust) for your custom lsp it will automatically be taken into account.
 
-| Command        | Description                         |
-| -------------- | ----------------------------------- |
-| `<C-k>`        | Select previous  item in suggestion |
-| `<C-j>`        | Select next  item in suggestion     |
-| `<C-b>`        | Scroll docs (up)                    |
-| `<C-f>`        | Scroll docs (down)                  |
-| `<C-Space>`    | Enable suggestions                  |
-| `<C-e>`        | Abort sugestions                    |
-| `<CR>` (enter) | Confirm selection                   |
+| Command        | Description                        |
+| -------------- | ---------------------------------- |
+| `<C-k>`        | Select previous item in suggestion |
+| `<C-j>`        | Select next item in suggestion     |
+| `<C-b>`        | Scroll docs (up)                   |
+| `<C-f>`        | Scroll docs (down)                 |
+| `<C-Space>`    | Enable suggestions                 |
+| `<C-e>`        | Abort sugestions                   |
+| `<CR>` (enter) | Confirm selection                  |
 
+### LSP ([nvim-lspconfig](https://github.com/neovim/nvim-lspconfig))
+
+> LSP server is configured to support documentation from mutliple sources. For now this config supports rust, golang, python, vue.js, typescript and openTofu / terraform.
+
+| Command      | Description                                |
+| ------------ | ------------------------------------------ |
+| `<K>`        | Read documentation of current hovered item |
+| `<leader>rn` | Smart rename of current item               |
+| `<leader>rs` | Restart LSP server                         |
+| `<gd>`       | Show LSP definitions                       |
+| `<gi>`       | Show LSP implementation                    |
 
 ## License
 
