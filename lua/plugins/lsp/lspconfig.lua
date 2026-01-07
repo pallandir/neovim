@@ -1,51 +1,57 @@
 return {
-	-- Mason: Package manager for LSP servers
+	-- 📦 Mason: Package manager for LSP servers
 	{
 		"williamboman/mason.nvim",
-		config = function()
-			require("mason").setup({
-				ui = {
-					border = "rounded",
-					icons = {
-						package_installed = "✓",
-						package_pending = "➜",
-						package_uninstalled = "✗",
-					},
+		opts = {
+			ui = {
+				border = "rounded",
+				icons = {
+					package_installed = "✓",
+					package_pending = "➜",
+					package_uninstalled = "✗",
 				},
-			})
-		end,
+			},
+		},
 	},
 
-	-- Mason-LSPConfig: Bridge between Mason and LSPConfig
+	-- 🛠️ Mason-LSPConfig: Bridges Mason and nvim-lspconfig
 	{
 		"williamboman/mason-lspconfig.nvim",
 		dependencies = { "williamboman/mason.nvim" },
-		config = function()
-			require("mason-lspconfig").setup({
-				-- Automatically install these servers
-				ensure_installed = {
-					"lua_ls",
-					"rust_analyzer",
-					"gopls",
-					"pyright",
-					"ruff",
-					"ts_ls",
-					"eslint",
-					"html",
-					"cssls",
-					"jsonls",
-					"tailwindcss",
-					"emmet_ls",
-					"dockerls",
-					"volar",
-				},
-				-- Auto-install servers when opening relevant files
-				automatic_installation = true,
-			})
-		end,
+		opts = {
+			-- The list of servers to auto-install (Mason will handle the installation)
+			ensure_installed = {
+				"lua_ls",
+				"rust_analyzer",
+				"gopls",
+				"pyright",
+				"ruff_lsp",
+				"tsserver",
+				"eslint",
+				"html",
+				"cssls",
+				"jsonls",
+				"tailwindcss",
+				"emmet_ls",
+				"dockerls",
+				"volar",
+			},
+			-- This tells mason-lspconfig to automatically enable all installed servers
+			-- using the native Nvim API (vim.lsp.enable)
+			automatic_installation = true,
+			-- Use the new setup_handlers to enable servers
+			setup_handlers = {
+				-- Default handler for all servers not explicitly configured below
+				function(server_name)
+					-- Call vim.lsp.enable to activate the server for its filetypes.
+					-- nvim-lspconfig provides the base config via runtimepath.
+					vim.lsp.enable(server_name)
+				end,
+			},
+		},
 	},
 
-	-- LSPConfig: Provides default configurations for LSP servers
+	-- ⚙️ LSPConfig: Provides default configurations and applies custom settings
 	{
 		"neovim/nvim-lspconfig",
 		event = { "BufReadPre", "BufNewFile" },
@@ -57,118 +63,133 @@ return {
 			{ "folke/neodev.nvim", opts = {} },
 		},
 		config = function()
-			-- Import required modules
-			local lspconfig = require("lspconfig")
 			local cmp_nvim_lsp = require("cmp_nvim_lsp")
-			local mason_lspconfig = require("mason-lspconfig")
 
-			-- Enhanced capabilities for autocompletion
+			-- Enhanced capabilities for autocompletion (passed to ALL servers)
 			local capabilities = cmp_nvim_lsp.default_capabilities()
 
-			-- Keybindings when LSP attaches to buffer
-			vim.api.nvim_create_autocmd("LspAttach", {
-				group = vim.api.nvim_create_augroup("UserLspConfig", {}),
-				callback = function(ev)
-					local opts = { buffer = ev.buf, silent = true }
+			-- Function to setup keybindings when LSP attaches to buffer (on_attach)
+			-- This function will be applied globally to all servers via the '*' config.
+			local on_attach = function(client, bufnr)
+				-- Client-specific logic (e.g., auto-fix on save for ESLint)
+				if client.name == "eslint" then
+					vim.api.nvim_create_autocmd("BufWritePre", {
+						buffer = bufnr,
+						command = "EslintFixAll",
+					})
+				end
 
-					-- Navigation
-					vim.keymap.set(
-						"n",
-						"gR",
-						"<cmd>Telescope lsp_references<CR>",
-						vim.tbl_extend("force", opts, { desc = "Show LSP references" })
-					)
-					vim.keymap.set(
-						"n",
-						"gD",
-						vim.lsp.buf.declaration,
-						vim.tbl_extend("force", opts, { desc = "Go to declaration" })
-					)
-					vim.keymap.set(
-						"n",
-						"gd",
-						"<cmd>Telescope lsp_definitions<CR>",
-						vim.tbl_extend("force", opts, { desc = "Show LSP definitions" })
-					)
-					vim.keymap.set(
-						"n",
-						"gi",
-						"<cmd>Telescope lsp_implementations<CR>",
-						vim.tbl_extend("force", opts, { desc = "Show LSP implementations" })
-					)
-					vim.keymap.set(
-						"n",
-						"gt",
-						"<cmd>Telescope lsp_type_definitions<CR>",
-						vim.tbl_extend("force", opts, { desc = "Show LSP type definitions" })
-					)
+				local opts = { buffer = bufnr, silent = true }
 
-					-- Actions
-					vim.keymap.set(
-						{ "n", "v" },
-						"<leader>ca",
-						vim.lsp.buf.code_action,
-						vim.tbl_extend("force", opts, { desc = "See available code actions" })
-					)
-					vim.keymap.set(
-						"n",
-						"<leader>rn",
-						vim.lsp.buf.rename,
-						vim.tbl_extend("force", opts, { desc = "Smart rename" })
-					)
+				-- Navigation
+				vim.keymap.set(
+					"n",
+					"gR",
+					"<cmd>Telescope lsp_references<CR>",
+					vim.tbl_extend("force", opts, { desc = "Show LSP references" })
+				)
+				vim.keymap.set(
+					"n",
+					"gD",
+					vim.lsp.buf.declaration,
+					vim.tbl_extend("force", opts, { desc = "Go to declaration" })
+				)
+				vim.keymap.set(
+					"n",
+					"gd",
+					"<cmd>Telescope lsp_definitions<CR>",
+					vim.tbl_extend("force", opts, { desc = "Show LSP definitions" })
+				)
+				vim.keymap.set(
+					"n",
+					"gi",
+					"<cmd>Telescope lsp_implementations<CR>",
+					vim.tbl_extend("force", opts, { desc = "Show LSP implementations" })
+				)
+				vim.keymap.set(
+					"n",
+					"gt",
+					"<cmd>Telescope lsp_type_definitions<CR>",
+					vim.tbl_extend("force", opts, { desc = "Show LSP type definitions" })
+				)
 
-					-- Diagnostics
-					vim.keymap.set(
-						"n",
-						"<leader>D",
-						"<cmd>Telescope diagnostics bufnr=0<CR>",
-						vim.tbl_extend("force", opts, { desc = "Show buffer diagnostics" })
-					)
-					vim.keymap.set(
-						"n",
-						"<leader>d",
-						vim.diagnostic.open_float,
-						vim.tbl_extend("force", opts, { desc = "Show line diagnostics" })
-					)
-					vim.keymap.set(
-						"n",
-						"[d",
-						vim.diagnostic.goto_prev,
-						vim.tbl_extend("force", opts, { desc = "Go to previous diagnostic" })
-					)
-					vim.keymap.set(
-						"n",
-						"]d",
-						vim.diagnostic.goto_next,
-						vim.tbl_extend("force", opts, { desc = "Go to next diagnostic" })
-					)
+				-- Actions
+				vim.keymap.set(
+					{ "n", "v" },
+					"<leader>ca",
+					vim.lsp.buf.code_action,
+					vim.tbl_extend("force", opts, { desc = "See available code actions" })
+				)
+				vim.keymap.set(
+					"n",
+					"<leader>rn",
+					vim.lsp.buf.rename,
+					vim.tbl_extend("force", opts, { desc = "Smart rename" })
+				)
 
-					-- Documentation
-					vim.keymap.set(
-						"n",
-						"K",
-						vim.lsp.buf.hover,
-						vim.tbl_extend("force", opts, { desc = "Show documentation for what is under cursor" })
-					)
+				-- Diagnostics
+				vim.keymap.set(
+					"n",
+					"<leader>D",
+					"<cmd>Telescope diagnostics bufnr=0<CR>",
+					vim.tbl_extend("force", opts, { desc = "Show buffer diagnostics" })
+				)
+				vim.keymap.set(
+					"n",
+					"<leader>d",
+					vim.diagnostic.open_float,
+					vim.tbl_extend("force", opts, { desc = "Show line diagnostics" })
+				)
+				vim.keymap.set(
+					"n",
+					"[d",
+					vim.diagnostic.goto_prev,
+					vim.tbl_extend("force", opts, { desc = "Go to previous diagnostic" })
+				)
+				vim.keymap.set(
+					"n",
+					"]d",
+					vim.diagnostic.goto_next,
+					vim.tbl_extend("force", opts, { desc = "Go to next diagnostic" })
+				)
 
-					-- Utility
-					vim.keymap.set(
-						"n",
-						"<leader>rs",
-						":LspRestart<CR>",
-						vim.tbl_extend("force", opts, { desc = "Restart LSP" })
-					)
-				end,
+				-- Documentation
+				vim.keymap.set(
+					"n",
+					"K",
+					vim.lsp.buf.hover,
+					vim.tbl_extend("force", opts, { desc = "Show documentation for what is under cursor" })
+				)
+
+				-- Utility: Updated command to use the new native LspRestart alias
+				vim.keymap.set(
+					"n",
+					"<leader>rs",
+					":LspRestart<CR>",
+					vim.tbl_extend("force", opts, { desc = "Restart LSP" })
+				)
+			end
+
+			-- === 1. Global/Catch-all Configuration (New Native API) ===
+			-- Use vim.lsp.config('*', {...}) to set capabilities and on_attach for all servers.
+			-- This is the recommended way to handle common settings.
+			vim.lsp.config("*", {
+				on_attach = on_attach,
+				capabilities = capabilities,
+				-- Optionally add flags like debounce settings for all servers here:
+				-- flags = {
+				-- 	debounce_text_changes = 150,
+				-- },
 			})
 
-			-- Configure diagnostic signs
+			-- Configure diagnostic signs (This remains the same, as it's a native Nvim feature)
 			vim.diagnostic.config({
 				signs = {
 					text = {
-						[vim.diagnostic.severity.ERROR] = " ",
-						[vim.diagnostic.severity.WARN] = " ",
-						[vim.diagnostic.severity.INFO] = " ",
-						[vim.diagnostic.severity.HINT] = "󰠠 ",
+						[vim.diagnostic.severity.ERROR] = "",
+						[vim.diagnostic.severity.WARN] = "",
+						[vim.diagnostic.severity.INFO] = "",
+						[vim.diagnostic.severity.HINT] = "",
 					},
 				},
 				virtual_text = {
@@ -187,193 +208,150 @@ return {
 				},
 			})
 
-			-- Default configuration for all servers
-			local default_config = {
-				capabilities = capabilities,
-			}
+			-- === 2. Custom Server Overrides (New Native API) ===
+			-- Only define configurations for servers where you need to override the defaults.
+			-- The global on_attach/capabilities from vim.lsp.config('*') will be merged in.
 
-			-- Auto-setup installed servers with default config
-			mason_lspconfig.setup_handlers({
-				-- Default handler for all servers
-				function(server_name)
-					lspconfig[server_name].setup(default_config)
-				end,
-
-				-- Custom handler for Lua
-				["lua_ls"] = function()
-					lspconfig.lua_ls.setup({
-						capabilities = capabilities,
-						settings = {
-							Lua = {
-								diagnostics = {
-									globals = { "vim" },
-								},
-								workspace = {
-									library = {
-										[vim.fn.expand("$VIMRUNTIME/lua")] = true,
-										[vim.fn.stdpath("config") .. "/lua"] = true,
-									},
-								},
-								telemetry = {
-									enable = false,
-								},
+			-- Custom setup for Lua (lua_ls)
+			vim.lsp.config("lua_ls", {
+				settings = {
+					Lua = {
+						diagnostics = {
+							globals = { "vim" },
+						},
+						workspace = {
+							library = {
+								[vim.fn.expand("$VIMRUNTIME/lua")] = true,
+								[vim.fn.stdpath("config") .. "/lua"] = true,
 							},
 						},
-					})
-				end,
-
-				-- Custom handler for Rust
-				["rust_analyzer"] = function()
-					lspconfig.rust_analyzer.setup({
-						capabilities = capabilities,
-						settings = {
-							["rust-analyzer"] = {
-								cargo = {
-									allFeatures = true,
-									loadOutDirsFromCheck = true,
-									runBuildScripts = true,
-								},
-								checkOnSave = {
-									command = "clippy",
-									allFeatures = true,
-								},
-								procMacro = {
-									enable = true,
-									ignored = {
-										["async-trait"] = { "async_trait" },
-										["napi-derive"] = { "napi" },
-										["async-recursion"] = { "async_recursion" },
-									},
-								},
-							},
+						telemetry = {
+							enable = false,
 						},
-					})
-				end,
-
-				-- Custom handler for Go
-				["gopls"] = function()
-					lspconfig.gopls.setup({
-						capabilities = capabilities,
-						settings = {
-							gopls = {
-								analyses = {
-									unusedparams = true,
-									shadow = true,
-								},
-								staticcheck = true,
-								gofumpt = true,
-								hints = {
-									assignVariableTypes = true,
-									compositeLiteralFields = true,
-									compositeLiteralTypes = true,
-									constantValues = true,
-									functionTypeParameters = true,
-									parameterNames = true,
-									rangeVariableTypes = true,
-								},
-							},
-						},
-					})
-				end,
-
-				-- Custom handler for Python
-				["pyright"] = function()
-					lspconfig.pyright.setup({
-						capabilities = capabilities,
-						settings = {
-							python = {
-								analysis = {
-									autoSearchPaths = true,
-									diagnosticMode = "workspace",
-									useLibraryCodeForTypes = true,
-									typeCheckingMode = "basic",
-								},
-							},
-						},
-					})
-				end,
-
-				-- Custom handler for TypeScript/JavaScript
-				["ts_ls"] = function()
-					lspconfig.ts_ls.setup({
-						capabilities = capabilities,
-						settings = {
-							typescript = {
-								inlayHints = {
-									includeInlayParameterNameHints = "all",
-									includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-									includeInlayFunctionParameterTypeHints = true,
-									includeInlayVariableTypeHints = true,
-								},
-							},
-							javascript = {
-								inlayHints = {
-									includeInlayParameterNameHints = "all",
-									includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-									includeInlayFunctionParameterTypeHints = true,
-									includeInlayVariableTypeHints = true,
-								},
-							},
-						},
-					})
-				end,
-
-				-- Custom handler for ESLint
-				["eslint"] = function()
-					lspconfig.eslint.setup({
-						capabilities = capabilities,
-						on_attach = function(client, bufnr)
-							-- Auto-fix on save
-							vim.api.nvim_create_autocmd("BufWritePre", {
-								buffer = bufnr,
-								command = "EslintFixAll",
-							})
-						end,
-					})
-				end,
-
-				-- Custom handler for Emmet
-				["emmet_ls"] = function()
-					lspconfig.emmet_ls.setup({
-						capabilities = capabilities,
-						filetypes = {
-							"html",
-							"css",
-							"scss",
-							"javascript",
-							"javascriptreact",
-							"typescript",
-							"typescriptreact",
-							"vue",
-						},
-					})
-				end,
-
-				-- Custom handler for Tailwind
-				["tailwindcss"] = function()
-					lspconfig.tailwindcss.setup({
-						capabilities = capabilities,
-						settings = {
-							tailwindCSS = {
-								experimental = {
-									classRegex = {
-										{ "cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]" },
-										{ "cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)" },
-									},
-								},
-							},
-						},
-					})
-				end,
-
-				-- Custom handler for Vue
-				["volar"] = function()
-					lspconfig.volar.setup({
-						capabilities = capabilities,
-						filetypes = { "vue", "typescript", "javascript" },
-					})
-				end,
+					},
+				},
 			})
+
+			-- Custom setup for Rust (rust_analyzer)
+			vim.lsp.config("rust_analyzer", {
+				settings = {
+					["rust-analyzer"] = {
+						cargo = {
+							allFeatures = true,
+							loadOutDirsFromCheck = true,
+							runBuildScripts = true,
+						},
+						checkOnSave = {
+							command = "clippy",
+							allFeatures = true,
+						},
+						procMacro = {
+							enable = true,
+							ignored = {
+								["async-trait"] = { "async_trait" },
+								["napi-derive"] = { "napi" },
+								["async-recursion"] = { "async_recursion" },
+							},
+						},
+					},
+				},
+			})
+
+			-- Custom setup for Go (gopls)
+			vim.lsp.config("gopls", {
+				settings = {
+					gopls = {
+						analyses = {
+							unusedparams = true,
+							shadow = true,
+						},
+						staticcheck = true,
+						gofumpt = true,
+						hints = {
+							assignVariableTypes = true,
+							compositeLiteralFields = true,
+							compositeLiteralTypes = true,
+							constantValues = true,
+							functionTypeParameters = true,
+							parameterNames = true,
+							rangeVariableTypes = true,
+						},
+					},
+				},
+			})
+
+			-- Custom setup for Python (pyright)
+			vim.lsp.config("pyright", {
+				settings = {
+					python = {
+						analysis = {
+							autoSearchPaths = true,
+							diagnosticMode = "workspace",
+							useLibraryCodeForTypes = true,
+							typeCheckingMode = "basic",
+						},
+					},
+				},
+			})
+
+			-- Custom setup for TypeScript/JavaScript (tsserver)
+			vim.lsp.config("tsserver", {
+				settings = {
+					typescript = {
+						inlayHints = {
+							includeInlayParameterNameHints = "all",
+							includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+							includeInlayFunctionParameterTypeHints = true,
+							includeInlayVariableTypeHints = true,
+						},
+					},
+					javascript = {
+						inlayHints = {
+							includeInlayParameterNameHints = "all",
+							includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+							includeInlayFunctionParameterTypeHints = true,
+							includeInlayVariableTypeHints = true,
+						},
+					},
+				},
+			})
+
+			-- Custom setup for Emmet (emmet_ls)
+			vim.lsp.config("emmet_ls", {
+				filetypes = {
+					"html",
+					"css",
+					"scss",
+					"javascript",
+					"javascriptreact",
+					"typescript",
+					"typescriptreact",
+					"vue",
+				},
+			})
+
+			-- Custom setup for Tailwind (tailwindcss)
+			vim.lsp.config("tailwindcss", {
+				settings = {
+					tailwindCSS = {
+						experimental = {
+							classRegex = {
+								{ "cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]" },
+								{ "cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)" },
+							},
+						},
+					},
+				},
+			})
+
+			-- Custom setup for Vue (volar)
+			vim.lsp.config("volar", {
+				filetypes = { "vue", "typescript", "javascript" },
+			})
+
+			-- NOTE: ruff_lsp, eslint, html, cssls, jsonls, and dockerls use the default
+			-- config provided by nvim-lspconfig and automatically inherit the global
+			-- on_attach and capabilities set in vim.lsp.config('*').
 		end,
 	},
 }
