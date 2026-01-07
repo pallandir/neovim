@@ -1,4 +1,5 @@
 vim.g.mapleader = " "
+vim.g.python3_host_prog = "/opt/homebrew/bin/python3"
 
 local keymap = vim.keymap
 local term_buf = nil
