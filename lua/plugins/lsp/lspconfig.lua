@@ -1,5 +1,4 @@
 return {
-	-- 📦 Mason: Package manager for LSP servers
 	{
 		"williamboman/mason.nvim",
 		opts = {
@@ -14,12 +13,10 @@ return {
 		},
 	},
 
-	-- 🛠️ Mason-LSPConfig: Bridges Mason and nvim-lspconfig
 	{
 		"williamboman/mason-lspconfig.nvim",
 		dependencies = { "williamboman/mason.nvim" },
 		opts = {
-			-- The list of servers to auto-install (Mason will handle the installation)
 			ensure_installed = {
 				"lua_ls",
 				"rust_analyzer",
@@ -36,22 +33,15 @@ return {
 				"dockerls",
 				"volar",
 			},
-			-- This tells mason-lspconfig to automatically enable all installed servers
-			-- using the native Nvim API (vim.lsp.enable)
 			automatic_installation = true,
-			-- Use the new setup_handlers to enable servers
 			setup_handlers = {
-				-- Default handler for all servers not explicitly configured below
 				function(server_name)
-					-- Call vim.lsp.enable to activate the server for its filetypes.
-					-- nvim-lspconfig provides the base config via runtimepath.
 					vim.lsp.enable(server_name)
 				end,
 			},
 		},
 	},
 
-	-- ⚙️ LSPConfig: Provides default configurations and applies custom settings
 	{
 		"neovim/nvim-lspconfig",
 		event = { "BufReadPre", "BufNewFile" },
@@ -65,13 +55,9 @@ return {
 		config = function()
 			local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
-			-- Enhanced capabilities for autocompletion (passed to ALL servers)
 			local capabilities = cmp_nvim_lsp.default_capabilities()
 
-			-- Function to setup keybindings when LSP attaches to buffer (on_attach)
-			-- This function will be applied globally to all servers via the '*' config.
 			local on_attach = function(client, bufnr)
-				-- Client-specific logic (e.g., auto-fix on save for ESLint)
 				if client.name == "eslint" then
 					vim.api.nvim_create_autocmd("BufWritePre", {
 						buffer = bufnr,
@@ -81,7 +67,6 @@ return {
 
 				local opts = { buffer = bufnr, silent = true }
 
-				-- Navigation
 				vim.keymap.set(
 					"n",
 					"gR",
@@ -113,7 +98,6 @@ return {
 					vim.tbl_extend("force", opts, { desc = "Show LSP type definitions" })
 				)
 
-				-- Actions
 				vim.keymap.set(
 					{ "n", "v" },
 					"<leader>ca",
@@ -127,7 +111,6 @@ return {
 					vim.tbl_extend("force", opts, { desc = "Smart rename" })
 				)
 
-				-- Diagnostics
 				vim.keymap.set(
 					"n",
 					"<leader>D",
@@ -142,26 +125,11 @@ return {
 				)
 				vim.keymap.set(
 					"n",
-					"[d",
-					vim.diagnostic.goto_prev,
-					vim.tbl_extend("force", opts, { desc = "Go to previous diagnostic" })
-				)
-				vim.keymap.set(
-					"n",
-					"]d",
-					vim.diagnostic.goto_next,
-					vim.tbl_extend("force", opts, { desc = "Go to next diagnostic" })
-				)
-
-				-- Documentation
-				vim.keymap.set(
-					"n",
 					"K",
 					vim.lsp.buf.hover,
 					vim.tbl_extend("force", opts, { desc = "Show documentation for what is under cursor" })
 				)
 
-				-- Utility: Updated command to use the new native LspRestart alias
 				vim.keymap.set(
 					"n",
 					"<leader>rs",
@@ -170,19 +138,11 @@ return {
 				)
 			end
 
-			-- === 1. Global/Catch-all Configuration (New Native API) ===
-			-- Use vim.lsp.config('*', {...}) to set capabilities and on_attach for all servers.
-			-- This is the recommended way to handle common settings.
 			vim.lsp.config("*", {
 				on_attach = on_attach,
 				capabilities = capabilities,
-				-- Optionally add flags like debounce settings for all servers here:
-				-- flags = {
-				-- 	debounce_text_changes = 150,
-				-- },
 			})
 
-			-- Configure diagnostic signs (This remains the same, as it's a native Nvim feature)
 			vim.diagnostic.config({
 				signs = {
 					text = {
@@ -202,17 +162,12 @@ return {
 					focusable = false,
 					style = "minimal",
 					border = "rounded",
-					source = "always",
+					source = "if_many",
 					header = "",
 					prefix = "",
 				},
 			})
 
-			-- === 2. Custom Server Overrides (New Native API) ===
-			-- Only define configurations for servers where you need to override the defaults.
-			-- The global on_attach/capabilities from vim.lsp.config('*') will be merged in.
-
-			-- Custom setup for Lua (lua_ls)
 			vim.lsp.config("lua_ls", {
 				settings = {
 					Lua = {
@@ -232,7 +187,6 @@ return {
 				},
 			})
 
-			-- Custom setup for Rust (rust_analyzer)
 			vim.lsp.config("rust_analyzer", {
 				settings = {
 					["rust-analyzer"] = {
@@ -257,7 +211,6 @@ return {
 				},
 			})
 
-			-- Custom setup for Go (gopls)
 			vim.lsp.config("gopls", {
 				settings = {
 					gopls = {
@@ -280,7 +233,6 @@ return {
 				},
 			})
 
-			-- Custom setup for Python (pyright)
 			vim.lsp.config("pyright", {
 				settings = {
 					python = {
@@ -294,7 +246,6 @@ return {
 				},
 			})
 
-			-- Custom setup for TypeScript/JavaScript (tsserver)
 			vim.lsp.config("tsserver", {
 				settings = {
 					typescript = {
@@ -316,7 +267,6 @@ return {
 				},
 			})
 
-			-- Custom setup for Emmet (emmet_ls)
 			vim.lsp.config("emmet_ls", {
 				filetypes = {
 					"html",
@@ -330,7 +280,6 @@ return {
 				},
 			})
 
-			-- Custom setup for Tailwind (tailwindcss)
 			vim.lsp.config("tailwindcss", {
 				settings = {
 					tailwindCSS = {
@@ -344,14 +293,9 @@ return {
 				},
 			})
 
-			-- Custom setup for Vue (volar)
 			vim.lsp.config("volar", {
 				filetypes = { "vue", "typescript", "javascript" },
 			})
-
-			-- NOTE: ruff_lsp, eslint, html, cssls, jsonls, and dockerls use the default
-			-- config provided by nvim-lspconfig and automatically inherit the global
-			-- on_attach and capabilities set in vim.lsp.config('*').
 		end,
 	},
 }
