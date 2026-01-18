@@ -1,55 +1,51 @@
 return {
-	"williamboman/mason.nvim",
-	dependencies = {
-		"williamboman/mason-lspconfig.nvim",
-		"WhoIsSethDaniel/mason-tool-installer.nvim",
-	},
-	config = function()
-		-- import mason
-		local mason = require("mason")
-
-		-- import mason-lspconfig
-		local mason_lspconfig = require("mason-lspconfig")
-		local mason_tool_installer = require("mason-tool-installer")
-
-		-- enable mason and configure icons
-		mason.setup({
+	{
+		"mason-org/mason.nvim",
+		opts = {
 			ui = {
+				border = "rounded",
 				icons = {
 					package_installed = "✓",
 					package_pending = "➜",
 					package_uninstalled = "✗",
 				},
 			},
-		})
+		},
+	},
 
-		mason_lspconfig.setup({
-			-- list of servers for mason to install
+	{
+		"mason-org/mason-lspconfig.nvim",
+		dependencies = { "mason-org/mason.nvim" },
+		opts = {
 			ensure_installed = {
-				"html",
-				"css-lsp",
-				"tailwindcss",
 				"lua_ls",
-				"emmet-ls",
-				"pyright",
+				"rust_analyzer",
 				"gopls",
-				"vue_ls",
+				"pyright",
+				"ruff",
 				"ts_ls",
-				"tofu_ls",
-				"docker-lsp",
 				"eslint",
-				"json-lsp",
+				"html",
+				"cssls",
+				"jsonls",
+				"tailwindcss",
+				"emmet_ls",
+				"dockerls",
+				"vue_ls",
 			},
-		})
+			automatic_enable = true,
+		},
+	},
 
-		mason_tool_installer.setup({
-			ensure_installed = {
-				"prettier",
-				"stylua",
-				"black",
-				"ruff", -- formatting and linting
-				"eslint_d", --linting
-			},
-		})
-	end,
+	{
+		"neovim/nvim-lspconfig",
+		event = { "BufReadPre", "BufNewFile" },
+		dependencies = {
+			"hrsh7th/cmp-nvim-lsp",
+			"mason-org/mason.nvim",
+			"mason-org/mason-lspconfig.nvim",
+			"folke/neodev.nvim",
+			{ "antosha417/nvim-lsp-file-operations", config = true },
+		},
+	},
 }
