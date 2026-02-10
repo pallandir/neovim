@@ -26,7 +26,7 @@ After six years of using `VSCode`, I decided to switch to `Neovim`. I found trad
 
 In contrast, learning and configuring Vim felt rewarding. It offers a streamlined and efficient development experience that’s both powerful and enjoyable. I initially experimented with `NVChad`, but eventually moved away from it to build my own setup from scratch. This hands-on approach helped me deeply understand how `Neovim` works under the hood.
 
-This project is the result: a fully customized, lightweight IDE tailored to my workflow, with only the essential plugins. It supports Vue.js, Python, Go, Rust, and OpenTofu for a fast and focused development environment.
+This project is the result: a fully customized, lightweight IDE tailored to my workflow, with only the essential plugins. It supports Vue.js, Python, Go, Rust, and OpenTofu for a fast and focused development environment. It also includes OpenCode AI integration for AI-assisted coding directly within Neovim.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -81,6 +81,13 @@ rm -rf ~/.config/nvim/.git
 | `<leader>tp` | Go to previous tab                                 |
 | `<leader>tf` | Open current buffer in a new tab                   |
 
+### Terminal
+
+| Command      | Description                                 |
+| ------------ | ------------------------------------------- |
+| `<leader>th` | Toggle horizontal terminal (40% height)     |
+| `<leader>oo` | Toggle OpenCode AI terminal (40% width)     |
+
 ### File explorer ([nvim-tree](https://github.com/nvim-tree/nvim-tree.lua))
 
 | Command      | Description                          |
@@ -90,22 +97,31 @@ rm -rf ~/.config/nvim/.git
 | `<leader>nc` | Collapse file explorer               |
 | `<leader>nr` | Refresh file explorer                |
 
-### Session management ([auto-session.nvim](https://github.com/rmagatti/auto-session))
+### Session management ([persistence.nvim](https://github.com/folke/persistence.nvim))
 
-| Command      | Description                            |
-| ------------ | -------------------------------------- |
-| `<leader>ws` | Save session for auto session root dir |
-| `<leader>wr` | Restore session for cwd                |
+| Command      | Description          |
+| ------------ | -------------------- |
+| `<leader>wr` | Restore session      |
+| `<leader>ws` | Select session       |
+| `<leader>wl` | Restore last session |
+| `<leader>wd` | Stop persistence     |
 
-### Find files and grep ([telescope.nvim](https://github.com/nvim-telescope/telescope.nvim))
+### Find files and grep ([fzf-lua](https://github.com/ibhagwan/fzf-lua))
 
-| Command      | Description                                           |
-| ------------ | ----------------------------------------------------- |
-| `<leader>ff` | Fuzzy find files in current working directory         |
-| `<leader>fr` | Fuzzy find recent files                               |
-| `<leader>fs` | Find string in current working directory              |
-| `<leader>fc` | Find string under cursor in current working directory |
-| `<leader>ft` | Find todos comments                                   |
+| Command      | Description                  |
+| ------------ | ---------------------------- |
+| `<leader>ff` | Find files                   |
+| `<leader>fr` | Recent files                 |
+| `<leader>fs` | Live grep                    |
+| `<leader>fc` | Grep word under cursor       |
+| `<leader>fb` | Find buffers                 |
+| `<leader>fh` | Help tags                    |
+| `<leader>fk` | Keymaps                      |
+| `<leader>fd` | Document diagnostics         |
+| `<leader>fD` | Workspace diagnostics        |
+
+> [!tip]
+> While in fzf-lua, use `Alt+i` to toggle ignored files and `Alt+h` to toggle hidden files.
 
 ### Errors management ([trouble.nvim](https://github.com/folke/trouble.nvim))
 
@@ -150,6 +166,42 @@ rm -rf ~/.config/nvim/.git
 | `<leader>rs` | Restart LSP server                         |
 | `<gd>`       | Show LSP definitions                       |
 | `<gi>`       | Show LSP implementation                    |
+
+### OpenCode AI ([opencode.nvim](https://github.com/sudo-tee/opencode.nvim))
+
+> OpenCode provides AI-assisted coding capabilities directly within Neovim. Use the plugin interface for a dedicated panel or the terminal integration for the full CLI experience.
+
+| Command      | Description                                |
+| ------------ | ------------------------------------------ |
+| `<leader>og` | Toggle OpenCode plugin panel               |
+| `<leader>oi` | OpenCode input prompt                      |
+| `<leader>od` | View OpenCode diffs                        |
+| `<leader>oo` | Toggle OpenCode in terminal split          |
+
+## Tmux Integration
+
+This config is designed to work alongside tmux with the shared configuration from the dotfiles repository. The tmux config includes:
+
+- **Prefix**: `Ctrl+a` (instead of default `Ctrl+b`)
+- **Catppuccin Mocha** theme for visual consistency
+- **Session persistence** via tmux-resurrect and tmux-continuum
+- **Vim-style navigation** with `h/j/k/l` keys
+
+### Tmux Keybindings
+
+| Command      | Description                     |
+| ------------ | ------------------------------- |
+| `prefix + o` | Open OpenCode in vertical pane  |
+| `prefix + \|`| Vertical split (current path)   |
+| `prefix + -` | Horizontal split (current path) |
+| `prefix + h` | Navigate pane left              |
+| `prefix + j` | Navigate pane down              |
+| `prefix + k` | Navigate pane up                |
+| `prefix + l` | Navigate pane right             |
+| `prefix + I` | Install TPM plugins             |
+
+> [!tip]
+> After first tmux launch, press `prefix + I` to install all plugins including the Catppuccin theme.
 
 ## License
 
