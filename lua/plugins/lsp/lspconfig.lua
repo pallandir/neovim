@@ -90,12 +90,6 @@ return {
 			)
 		end
 
-		local signs = { Error = "", Warn = "", Hint = "", Info = "" }
-		for type, icon in pairs(signs) do
-			local hl = "DiagnosticSign" .. type
-			vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-		end
-
 		vim.diagnostic.config({
 			virtual_text = { prefix = "●" },
 			update_in_insert = false,
@@ -106,6 +100,14 @@ return {
 				style = "minimal",
 				border = "rounded",
 				source = "if_many",
+			},
+			signs = {
+				text = {
+					[vim.diagnostic.severity.ERROR] = "",
+					[vim.diagnostic.severity.WARN] = "",
+					[vim.diagnostic.severity.HINT] = "",
+					[vim.diagnostic.severity.INFO] = "",
+				},
 			},
 		})
 
@@ -244,7 +246,7 @@ return {
 
 		lspconfig.dockerls.setup(default_opts)
 
-		lspconfig.volar.setup(vim.tbl_extend("force", default_opts, {
+		lspconfig.vue_ls.setup(vim.tbl_extend("force", default_opts, {
 			filetypes = { "vue", "javascript", "typescript" },
 		}))
 	end,

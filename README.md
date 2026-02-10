@@ -87,6 +87,8 @@ rm -rf ~/.config/nvim/.git
 | ------------ | ------------------------------------------- |
 | `<leader>th` | Toggle horizontal terminal (40% height)     |
 | `<leader>oo` | Toggle OpenCode AI terminal (40% width)     |
+| `<Esc><Esc>` | Exit terminal mode (back to normal mode)    |
+| `<C-w>`      | Window commands from terminal mode          |
 
 ### File explorer ([nvim-tree](https://github.com/nvim-tree/nvim-tree.lua))
 

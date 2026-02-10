@@ -17,6 +17,7 @@ return {
 		"mason-org/mason-lspconfig.nvim",
 		dependencies = { "mason-org/mason.nvim" },
 		opts = {
+			automatic_enable = false,
 			ensure_installed = {
 				"lua_ls",
 				"rust_analyzer",
@@ -31,7 +32,7 @@ return {
 				"tailwindcss",
 				"emmet_ls",
 				"dockerls",
-				"volar",
+				"vue_ls",
 			},
 		},
 	},

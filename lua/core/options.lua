@@ -31,3 +31,14 @@ opt.clipboard:append("unnamedplus") -- enable system clipboard
 -- windows
 opt.splitright = true
 opt.splitbelow = true
+
+-- Auto-clean empty unnamed buffers on quit
+vim.api.nvim_create_autocmd("BufEnter", {
+	callback = function(args)
+		local bufname = vim.api.nvim_buf_get_name(args.buf)
+		if bufname == "" then
+			vim.bo[args.buf].buftype = "nofile"
+			vim.bo[args.buf].bufhidden = "wipe"
+		end
+	end,
+})
