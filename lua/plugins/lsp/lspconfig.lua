@@ -3,13 +3,15 @@ return {
 	event = { "BufReadPre", "BufNewFile" },
 	dependencies = {
 		"hrsh7th/cmp-nvim-lsp",
-		"williamboman/mason.nvim",
-		"williamboman/mason-lspconfig.nvim",
+		"mason-org/mason.nvim",
+		"mason-org/mason-lspconfig.nvim",
 		{ "antosha417/nvim-lsp-file-operations", config = true },
 		{ "folke/neodev.nvim", opts = {} },
 	},
 	config = function()
+		local lspconfig = require("lspconfig")
 		local cmp_nvim_lsp = require("cmp_nvim_lsp")
+
 		local capabilities = cmp_nvim_lsp.default_capabilities()
 
 		local on_attach = function(client, bufnr)
@@ -25,7 +27,7 @@ return {
 			vim.keymap.set(
 				"n",
 				"gR",
-				"<cmd>Telescope lsp_references<CR>",
+				"<cmd>FzfLua lsp_references<CR>",
 				vim.tbl_extend("force", opts, { desc = "LSP references" })
 			)
 			vim.keymap.set(
@@ -37,19 +39,19 @@ return {
 			vim.keymap.set(
 				"n",
 				"gd",
-				"<cmd>Telescope lsp_definitions<CR>",
+				"<cmd>FzfLua lsp_definitions<CR>",
 				vim.tbl_extend("force", opts, { desc = "LSP definitions" })
 			)
 			vim.keymap.set(
 				"n",
 				"gi",
-				"<cmd>Telescope lsp_implementations<CR>",
+				"<cmd>FzfLua lsp_implementations<CR>",
 				vim.tbl_extend("force", opts, { desc = "LSP implementations" })
 			)
 			vim.keymap.set(
 				"n",
 				"gt",
-				"<cmd>Telescope lsp_type_definitions<CR>",
+				"<cmd>FzfLua lsp_typedefs<CR>",
 				vim.tbl_extend("force", opts, { desc = "LSP type definitions" })
 			)
 
@@ -69,7 +71,7 @@ return {
 			vim.keymap.set(
 				"n",
 				"<leader>D",
-				"<cmd>Telescope diagnostics bufnr=0<CR>",
+				"<cmd>FzfLua diagnostics_document<CR>",
 				vim.tbl_extend("force", opts, { desc = "Buffer diagnostics" })
 			)
 			vim.keymap.set(
@@ -88,20 +90,13 @@ return {
 			)
 		end
 
-		vim.lsp.config("*", {
-			on_attach = on_attach,
-			capabilities = capabilities,
-		})
+		local signs = { Error = "", Warn = "", Hint = "", Info = "" }
+		for type, icon in pairs(signs) do
+			local hl = "DiagnosticSign" .. type
+			vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+		end
 
 		vim.diagnostic.config({
-			signs = {
-				text = {
-					[vim.diagnostic.severity.ERROR] = "",
-					[vim.diagnostic.severity.WARN] = "",
-					[vim.diagnostic.severity.INFO] = "",
-					[vim.diagnostic.severity.HINT] = "",
-				},
-			},
 			virtual_text = { prefix = "●" },
 			update_in_insert = false,
 			underline = true,
@@ -114,7 +109,12 @@ return {
 			},
 		})
 
-		vim.lsp.config("lua_ls", {
+		local default_opts = {
+			on_attach = on_attach,
+			capabilities = capabilities,
+		}
+
+		lspconfig.lua_ls.setup(vim.tbl_extend("force", default_opts, {
 			settings = {
 				Lua = {
 					diagnostics = { globals = { "vim" } },
@@ -127,9 +127,9 @@ return {
 					telemetry = { enable = false },
 				},
 			},
-		})
+		}))
 
-		vim.lsp.config("rust_analyzer", {
+		lspconfig.rust_analyzer.setup(vim.tbl_extend("force", default_opts, {
 			settings = {
 				["rust-analyzer"] = {
 					cargo = {
@@ -151,9 +151,9 @@ return {
 					},
 				},
 			},
-		})
+		}))
 
-		vim.lsp.config("gopls", {
+		lspconfig.gopls.setup(vim.tbl_extend("force", default_opts, {
 			settings = {
 				gopls = {
 					analyses = {
@@ -173,9 +173,9 @@ return {
 					},
 				},
 			},
-		})
+		}))
 
-		vim.lsp.config("pyright", {
+		lspconfig.pyright.setup(vim.tbl_extend("force", default_opts, {
 			settings = {
 				python = {
 					analysis = {
@@ -186,9 +186,11 @@ return {
 					},
 				},
 			},
-		})
+		}))
 
-		vim.lsp.config("ts_ls", {
+		lspconfig.ruff.setup(default_opts)
+
+		lspconfig.ts_ls.setup(vim.tbl_extend("force", default_opts, {
 			settings = {
 				typescript = {
 					inlayHints = {
@@ -207,22 +209,14 @@ return {
 					},
 				},
 			},
-		})
+		}))
 
-		vim.lsp.config("emmet_ls", {
-			filetypes = {
-				"html",
-				"css",
-				"scss",
-				"javascript",
-				"javascriptreact",
-				"typescript",
-				"typescriptreact",
-				"vue",
-			},
-		})
+		lspconfig.eslint.setup(default_opts)
+		lspconfig.html.setup(default_opts)
+		lspconfig.cssls.setup(default_opts)
+		lspconfig.jsonls.setup(default_opts)
 
-		vim.lsp.config("tailwindcss", {
+		lspconfig.tailwindcss.setup(vim.tbl_extend("force", default_opts, {
 			settings = {
 				tailwindCSS = {
 					experimental = {
@@ -233,27 +227,25 @@ return {
 					},
 				},
 			},
-		})
+		}))
 
-		vim.lsp.config("vue_ls", {
+		lspconfig.emmet_ls.setup(vim.tbl_extend("force", default_opts, {
+			filetypes = {
+				"html",
+				"css",
+				"scss",
+				"javascript",
+				"javascriptreact",
+				"typescript",
+				"typescriptreact",
+				"vue",
+			},
+		}))
+
+		lspconfig.dockerls.setup(default_opts)
+
+		lspconfig.volar.setup(vim.tbl_extend("force", default_opts, {
 			filetypes = { "vue", "javascript", "typescript" },
-		})
-
-		vim.lsp.enable({
-			"lua_ls",
-			"rust_analyzer",
-			"gopls",
-			"pyright",
-			"ruff",
-			"ts_ls",
-			"eslint",
-			"html",
-			"cssls",
-			"jsonls",
-			"tailwindcss",
-			"emmet_ls",
-			"dockerls",
-			"vue_ls",
-		})
+		}))
 	end,
 }

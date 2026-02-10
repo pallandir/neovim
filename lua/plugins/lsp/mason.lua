@@ -31,21 +31,25 @@ return {
 				"tailwindcss",
 				"emmet_ls",
 				"dockerls",
-				"vue_ls",
+				"volar",
 			},
-			automatic_enable = true,
 		},
 	},
 
 	{
-		"neovim/nvim-lspconfig",
-		event = { "BufReadPre", "BufNewFile" },
-		dependencies = {
-			"hrsh7th/cmp-nvim-lsp",
-			"mason-org/mason.nvim",
-			"mason-org/mason-lspconfig.nvim",
-			"folke/neodev.nvim",
-			{ "antosha417/nvim-lsp-file-operations", config = true },
+		"WhoIsSethDaniel/mason-tool-installer.nvim",
+		dependencies = { "mason-org/mason.nvim" },
+		opts = {
+			ensure_installed = {
+				"prettier",
+				"stylua",
+				"black",
+				"gofumpt",
+				"goimports",
+				"eslint_d",
+			},
+			auto_update = false,
+			run_on_start = true,
 		},
 	},
 }

@@ -67,3 +67,35 @@ vim.keymap.set({ "n", "t" }, "<leader>th", function()
 
 	vim.cmd("startinsert")
 end, { desc = "Toggle horizontal terminal (40%)", noremap = true, silent = true })
+
+-- OpenCode terminal (vertical split)
+local opencode_buf = nil
+local opencode_win = nil
+
+vim.keymap.set("n", "<leader>oo", function()
+	if opencode_win and vim.api.nvim_win_is_valid(opencode_win) then
+		vim.api.nvim_win_close(opencode_win, true)
+		opencode_win = nil
+		return
+	end
+
+	local width = math.floor(vim.o.columns * 0.4)
+	vim.cmd(width .. "vsplit")
+	opencode_win = vim.api.nvim_get_current_win()
+
+	if not opencode_buf or not vim.api.nvim_buf_is_valid(opencode_buf) then
+		opencode_buf = vim.api.nvim_create_buf(false, true)
+		vim.api.nvim_set_option_value("buflisted", false, { buf = opencode_buf })
+		vim.api.nvim_win_set_buf(opencode_win, opencode_buf)
+		vim.fn.termopen("opencode", {
+			on_exit = function()
+				opencode_buf = nil
+				opencode_win = nil
+			end,
+		})
+	else
+		vim.api.nvim_win_set_buf(opencode_win, opencode_buf)
+	end
+
+	vim.cmd("startinsert")
+end, { desc = "Toggle OpenCode terminal", noremap = true, silent = true })
