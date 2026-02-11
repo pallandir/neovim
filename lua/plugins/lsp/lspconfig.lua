@@ -9,86 +9,90 @@ return {
 		{ "folke/neodev.nvim", opts = {} },
 	},
 	config = function()
-		local lspconfig = require("lspconfig")
 		local cmp_nvim_lsp = require("cmp_nvim_lsp")
-
 		local capabilities = cmp_nvim_lsp.default_capabilities()
 
-		local on_attach = function(client, bufnr)
-			if client.name == "eslint" then
-				vim.api.nvim_create_autocmd("BufWritePre", {
-					buffer = bufnr,
-					command = "EslintFixAll",
-				})
-			end
+		-- Configure LSP keybindings on attach
+		vim.api.nvim_create_autocmd("LspAttach", {
+			callback = function(args)
+				local bufnr = args.buf
+				local client = vim.lsp.get_client_by_id(args.data.client_id)
 
-			local opts = { buffer = bufnr, silent = true }
+				if client.name == "eslint" then
+					vim.api.nvim_create_autocmd("BufWritePre", {
+						buffer = bufnr,
+						command = "EslintFixAll",
+					})
+				end
 
-			vim.keymap.set(
-				"n",
-				"gR",
-				"<cmd>FzfLua lsp_references<CR>",
-				vim.tbl_extend("force", opts, { desc = "LSP references" })
-			)
-			vim.keymap.set(
-				"n",
-				"gD",
-				vim.lsp.buf.declaration,
-				vim.tbl_extend("force", opts, { desc = "Go to declaration" })
-			)
-			vim.keymap.set(
-				"n",
-				"gd",
-				"<cmd>FzfLua lsp_definitions<CR>",
-				vim.tbl_extend("force", opts, { desc = "LSP definitions" })
-			)
-			vim.keymap.set(
-				"n",
-				"gi",
-				"<cmd>FzfLua lsp_implementations<CR>",
-				vim.tbl_extend("force", opts, { desc = "LSP implementations" })
-			)
-			vim.keymap.set(
-				"n",
-				"gt",
-				"<cmd>FzfLua lsp_typedefs<CR>",
-				vim.tbl_extend("force", opts, { desc = "LSP type definitions" })
-			)
+				local opts = { buffer = bufnr, silent = true }
 
-			vim.keymap.set(
-				{ "n", "v" },
-				"<leader>ca",
-				vim.lsp.buf.code_action,
-				vim.tbl_extend("force", opts, { desc = "Code actions" })
-			)
-			vim.keymap.set(
-				"n",
-				"<leader>rn",
-				vim.lsp.buf.rename,
-				vim.tbl_extend("force", opts, { desc = "Rename symbol" })
-			)
+				vim.keymap.set(
+					"n",
+					"gR",
+					"<cmd>FzfLua lsp_references<CR>",
+					vim.tbl_extend("force", opts, { desc = "LSP references" })
+				)
+				vim.keymap.set(
+					"n",
+					"gD",
+					vim.lsp.buf.declaration,
+					vim.tbl_extend("force", opts, { desc = "Go to declaration" })
+				)
+				vim.keymap.set(
+					"n",
+					"gd",
+					"<cmd>FzfLua lsp_definitions<CR>",
+					vim.tbl_extend("force", opts, { desc = "LSP definitions" })
+				)
+				vim.keymap.set(
+					"n",
+					"gi",
+					"<cmd>FzfLua lsp_implementations<CR>",
+					vim.tbl_extend("force", opts, { desc = "LSP implementations" })
+				)
+				vim.keymap.set(
+					"n",
+					"gt",
+					"<cmd>FzfLua lsp_typedefs<CR>",
+					vim.tbl_extend("force", opts, { desc = "LSP type definitions" })
+				)
 
-			vim.keymap.set(
-				"n",
-				"<leader>D",
-				"<cmd>FzfLua diagnostics_document<CR>",
-				vim.tbl_extend("force", opts, { desc = "Buffer diagnostics" })
-			)
-			vim.keymap.set(
-				"n",
-				"<leader>d",
-				vim.diagnostic.open_float,
-				vim.tbl_extend("force", opts, { desc = "Line diagnostics" })
-			)
+				vim.keymap.set(
+					{ "n", "v" },
+					"<leader>ca",
+					vim.lsp.buf.code_action,
+					vim.tbl_extend("force", opts, { desc = "Code actions" })
+				)
+				vim.keymap.set(
+					"n",
+					"<leader>rn",
+					vim.lsp.buf.rename,
+					vim.tbl_extend("force", opts, { desc = "Rename symbol" })
+				)
 
-			vim.keymap.set("n", "K", vim.lsp.buf.hover, vim.tbl_extend("force", opts, { desc = "Hover documentation" }))
-			vim.keymap.set(
-				"n",
-				"<leader>rs",
-				"<cmd>LspRestart<CR>",
-				vim.tbl_extend("force", opts, { desc = "Restart LSP" })
-			)
-		end
+				vim.keymap.set(
+					"n",
+					"<leader>D",
+					"<cmd>FzfLua diagnostics_document<CR>",
+					vim.tbl_extend("force", opts, { desc = "Buffer diagnostics" })
+				)
+				vim.keymap.set(
+					"n",
+					"<leader>d",
+					vim.diagnostic.open_float,
+					vim.tbl_extend("force", opts, { desc = "Line diagnostics" })
+				)
+
+				vim.keymap.set("n", "K", vim.lsp.buf.hover, vim.tbl_extend("force", opts, { desc = "Hover documentation" }))
+				vim.keymap.set(
+					"n",
+					"<leader>rs",
+					"<cmd>LspRestart<CR>",
+					vim.tbl_extend("force", opts, { desc = "Restart LSP" })
+				)
+			end,
+		})
 
 		vim.diagnostic.config({
 			virtual_text = { prefix = "●" },
@@ -111,12 +115,9 @@ return {
 			},
 		})
 
-		local default_opts = {
-			on_attach = on_attach,
+		-- Configure servers
+		vim.lsp.config("lua_ls", {
 			capabilities = capabilities,
-		}
-
-		lspconfig.lua_ls.setup(vim.tbl_extend("force", default_opts, {
 			settings = {
 				Lua = {
 					diagnostics = { globals = { "vim" } },
@@ -129,9 +130,10 @@ return {
 					telemetry = { enable = false },
 				},
 			},
-		}))
+		})
 
-		lspconfig.rust_analyzer.setup(vim.tbl_extend("force", default_opts, {
+		vim.lsp.config("rust_analyzer", {
+			capabilities = capabilities,
 			settings = {
 				["rust-analyzer"] = {
 					cargo = {
@@ -153,9 +155,10 @@ return {
 					},
 				},
 			},
-		}))
+		})
 
-		lspconfig.gopls.setup(vim.tbl_extend("force", default_opts, {
+		vim.lsp.config("gopls", {
+			capabilities = capabilities,
 			settings = {
 				gopls = {
 					analyses = {
@@ -175,9 +178,16 @@ return {
 					},
 				},
 			},
-		}))
+		})
 
-		lspconfig.pyright.setup(vim.tbl_extend("force", default_opts, {
+		vim.lsp.config("pyright", {
+			capabilities = capabilities,
+			before_init = function(_, config)
+				local venv = vim.fn.getcwd() .. "/.venv"
+				if vim.fn.isdirectory(venv) == 1 then
+					config.settings.python.pythonPath = venv .. "/bin/python"
+				end
+			end,
 			settings = {
 				python = {
 					analysis = {
@@ -186,13 +196,16 @@ return {
 						useLibraryCodeForTypes = true,
 						typeCheckingMode = "basic",
 					},
+					venvPath = ".",
+					venv = ".venv",
 				},
 			},
-		}))
+		})
 
-		lspconfig.ruff.setup(default_opts)
+		vim.lsp.config("ruff", { capabilities = capabilities })
 
-		lspconfig.ts_ls.setup(vim.tbl_extend("force", default_opts, {
+		vim.lsp.config("ts_ls", {
+			capabilities = capabilities,
 			settings = {
 				typescript = {
 					inlayHints = {
@@ -211,14 +224,15 @@ return {
 					},
 				},
 			},
-		}))
+		})
 
-		lspconfig.eslint.setup(default_opts)
-		lspconfig.html.setup(default_opts)
-		lspconfig.cssls.setup(default_opts)
-		lspconfig.jsonls.setup(default_opts)
+		vim.lsp.config("eslint", { capabilities = capabilities })
+		vim.lsp.config("html", { capabilities = capabilities })
+		vim.lsp.config("cssls", { capabilities = capabilities })
+		vim.lsp.config("jsonls", { capabilities = capabilities })
 
-		lspconfig.tailwindcss.setup(vim.tbl_extend("force", default_opts, {
+		vim.lsp.config("tailwindcss", {
+			capabilities = capabilities,
 			settings = {
 				tailwindCSS = {
 					experimental = {
@@ -229,9 +243,10 @@ return {
 					},
 				},
 			},
-		}))
+		})
 
-		lspconfig.emmet_ls.setup(vim.tbl_extend("force", default_opts, {
+		vim.lsp.config("emmet_ls", {
+			capabilities = capabilities,
 			filetypes = {
 				"html",
 				"css",
@@ -242,12 +257,35 @@ return {
 				"typescriptreact",
 				"vue",
 			},
-		}))
+		})
 
-		lspconfig.dockerls.setup(default_opts)
+		vim.lsp.config("dockerls", { capabilities = capabilities })
 
-		lspconfig.vue_ls.setup(vim.tbl_extend("force", default_opts, {
+		vim.lsp.config("vue_ls", {
+			capabilities = capabilities,
 			filetypes = { "vue", "javascript", "typescript" },
-		}))
+		})
+
+		-- Enable all servers
+		local servers = {
+			"lua_ls",
+			"rust_analyzer",
+			"gopls",
+			"pyright",
+			"ruff",
+			"ts_ls",
+			"eslint",
+			"html",
+			"cssls",
+			"jsonls",
+			"tailwindcss",
+			"emmet_ls",
+			"dockerls",
+			"vue_ls",
+		}
+
+		for _, server in ipairs(servers) do
+			vim.lsp.enable(server)
+		end
 	end,
 }

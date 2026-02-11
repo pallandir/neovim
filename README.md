@@ -85,8 +85,6 @@ rm -rf ~/.config/nvim/.git
 
 | Command      | Description                                 |
 | ------------ | ------------------------------------------- |
-| `<leader>th` | Toggle horizontal terminal (40% height)     |
-| `<leader>oo` | Toggle OpenCode AI terminal (40% width)     |
 | `<Esc><Esc>` | Exit terminal mode (back to normal mode)    |
 | `<C-w>`      | Window commands from terminal mode          |
 
@@ -171,14 +169,15 @@ rm -rf ~/.config/nvim/.git
 
 ### OpenCode AI ([opencode.nvim](https://github.com/sudo-tee/opencode.nvim))
 
-> OpenCode provides AI-assisted coding capabilities directly within Neovim. Use the plugin interface for a dedicated panel or the terminal integration for the full CLI experience.
+> OpenCode provides AI-assisted coding capabilities directly within Neovim. The plugin integrates with the OpenCode CLI for a seamless AI-assisted development experience.
 
 | Command      | Description                                |
 | ------------ | ------------------------------------------ |
-| `<leader>og` | Toggle OpenCode plugin panel               |
+| `<leader>og` | Toggle OpenCode panel                      |
 | `<leader>oi` | OpenCode input prompt                      |
 | `<leader>od` | View OpenCode diffs                        |
-| `<leader>oo` | Toggle OpenCode in terminal split          |
+| `<C-q>`      | Close OpenCode panel (in input/output)     |
+| `<C-c>`      | Cancel running request                     |
 
 ## Tmux Integration
 
