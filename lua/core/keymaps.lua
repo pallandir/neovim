@@ -42,6 +42,11 @@ keymap.set("n", "<leader>tn", "<cmd>tabn<CR>", { desc = "Go to next tab" })
 keymap.set("n", "<leader>tp", "<cmd>tabp<CR>", { desc = "Go to previous tab" })
 keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer in a new tab" })
 
+-- Open external terminal
+keymap.set("n", "<leader>tt", function()
+  vim.fn.jobstart("x-terminal-emulator", { cwd = vim.fn.getcwd(), detach = true })
+end, { desc = "Open terminal in project directory" })
+
 -- Terminal mode escape mappings
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode", noremap = true, silent = true })
 vim.keymap.set("t", "<C-w>", "<C-\\><C-n><C-w>", { desc = "Window commands from terminal", noremap = true, silent = true })

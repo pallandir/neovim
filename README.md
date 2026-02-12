@@ -167,17 +167,35 @@ rm -rf ~/.config/nvim/.git
 | `<gd>`       | Show LSP definitions                       |
 | `<gi>`       | Show LSP implementation                    |
 
-### OpenCode AI ([opencode.nvim](https://github.com/sudo-tee/opencode.nvim))
+### OpenCode AI ([opencode.nvim](https://github.com/nickjvandyke/opencode.nvim))
 
-> OpenCode provides AI-assisted coding capabilities directly within Neovim. The plugin integrates with the OpenCode CLI for a seamless AI-assisted development experience.
+> OpenCode provides AI-assisted coding capabilities directly within Neovim. The plugin runs OpenCode in a terminal (via snacks.nvim) and shares editor context (buffer, selection, diagnostics) for seamless AI-assisted development.
 
-| Command      | Description                                |
-| ------------ | ------------------------------------------ |
-| `<leader>og` | Toggle OpenCode panel                      |
-| `<leader>oi` | OpenCode input prompt                      |
-| `<leader>od` | View OpenCode diffs                        |
-| `<C-q>`      | Close OpenCode panel (in input/output)     |
-| `<C-c>`      | Cancel running request                     |
+| Command      | Mode            | Description                                |
+| ------------ | --------------- | ------------------------------------------ |
+| `<leader>ot` | Normal/Terminal | Toggle OpenCode terminal                   |
+| `<leader>oo` | Normal/Visual   | Open selector (prompts, commands)          |
+| `<leader>oa` | Normal/Visual   | Ask OpenCode with context                  |
+| `<leader>op` | Normal          | Operator mode (apply prompt to range)      |
+| `<leader>of` | Normal/Visual   | Fix diagnostics                            |
+| `<leader>oe` | Normal/Visual   | Explain selection/buffer                   |
+| `<leader>or` | Normal/Visual   | Review selection/buffer                    |
+| `<leader>ou` | Normal          | Scroll OpenCode up                         |
+| `<leader>od` | Normal          | Scroll OpenCode down                       |
+
+#### Context Placeholders
+
+Use these in prompts to inject Neovim context:
+
+| Placeholder     | Description                              |
+| --------------- | ---------------------------------------- |
+| `@this`         | Selection or cursor position             |
+| `@buffer`       | Current buffer content                   |
+| `@buffers`      | All open buffers                         |
+| `@visible`      | Visible text in window                   |
+| `@diagnostics`  | LSP diagnostics                          |
+| `@diff`         | Git diff                                 |
+| `@quickfix`     | Quickfix list                            |
 
 ## Tmux Integration
 
