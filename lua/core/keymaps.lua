@@ -1,20 +1,37 @@
 vim.g.mapleader = " "
 
 local function get_python3_host()
-  local nvim_venv = vim.fn.stdpath("data") .. "/python-venv/bin/python"
-  if vim.fn.executable(nvim_venv) == 1 then
-    return nvim_venv
-  end
-  if vim.fn.has("mac") == 1 then
-    if vim.fn.executable("/opt/homebrew/bin/python3") == 1 then
-      return "/opt/homebrew/bin/python3"
-    elseif vim.fn.executable("/usr/local/bin/python3") == 1 then
-      return "/usr/local/bin/python3"
-    end
-  end
-  return vim.fn.exepath("python3")
+	local nvim_venv = vim.fn.stdpath("data") .. "/python-venv/bin/python"
+	if vim.fn.executable(nvim_venv) == 1 then
+		return nvim_venv
+	end
+	if vim.fn.has("mac") == 1 then
+		if vim.fn.executable("/opt/homebrew/bin/python3") == 1 then
+			return "/opt/homebrew/bin/python3"
+		elseif vim.fn.executable("/usr/local/bin/python3") == 1 then
+			return "/usr/local/bin/python3"
+		end
+	end
+	return vim.fn.exepath("python3")
 end
 vim.g.python3_host_prog = get_python3_host()
+
+-- Open external terminal
+local function open_terminal()
+	local cwd = vim.fn.getcwd()
+	local uname = vim.loop.os_uname().sysname
+
+	local cmd
+	if uname == "Darwin" then
+		cmd = { "/usr/bin/open", "-na", "iTerm.app", "--args", cwd }
+	elseif uname == "Linux" then
+		cmd = { "x-terminal-emulator" }
+	end
+
+	if cmd then
+		vim.fn.jobstart(cmd, { cwd = cwd, detach = true })
+	end
+end
 
 local keymap = vim.keymap
 
@@ -43,13 +60,16 @@ keymap.set("n", "<leader>tp", "<cmd>tabp<CR>", { desc = "Go to previous tab" })
 keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer in a new tab" })
 
 -- Open external terminal
-keymap.set("n", "<leader>tt", function()
-  vim.fn.jobstart("x-terminal-emulator", { cwd = vim.fn.getcwd(), detach = true })
-end, { desc = "Open terminal in project directory" })
+vim.keymap.set("n", "<leader>tt", open_terminal, { desc = "Open terminal" })
 
 -- Terminal mode escape mappings
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode", noremap = true, silent = true })
-vim.keymap.set("t", "<C-w>", "<C-\\><C-n><C-w>", { desc = "Window commands from terminal", noremap = true, silent = true })
+vim.keymap.set(
+	"t",
+	"<C-w>",
+	"<C-\\><C-n><C-w>",
+	{ desc = "Window commands from terminal", noremap = true, silent = true }
+)
 
 -- Git (mini.git)
 keymap.set("n", "<leader>gs", "<cmd>lua MiniGit.show_at_cursor()<CR>", { desc = "Git show at cursor" })
