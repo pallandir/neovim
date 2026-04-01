@@ -23,7 +23,7 @@ local function open_terminal()
 
 	local cmd
 	if uname == "Darwin" then
-		cmd = { "/usr/bin/open", "-na", "iTerm.app", "--args", cwd }
+		cmd = { "/usr/bin/open", "-a", "iTerm.app", cwd }
 	elseif uname == "Linux" then
 		cmd = { "x-terminal-emulator" }
 	end
